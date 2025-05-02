@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Approval Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+        .instructions {
+            text-align: center;
+            margin: 20px auto;
+            background: #e9ecef;
+            border-radius: 5px;
+            padding: 10px;
+            max-width: 500px;
+        }
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        form input, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        form button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background: #218838;
+        }
+        .result {
+            text-align: center;
+            margin: 20px auto;
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 500px;
+        }
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .chart-container {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Loan Approval Prediction</h1>
+
+    <div class="instructions">
+        <p><strong>How to determine your Credit History:</strong> Credit history is generally a number (0 or 1). Contact your bank or financial institution to get your credit report.</p>
+    </div>
+
+    <form action="/predict" method="POST">
+        <label for="Gender">Gender:</label>
+        <select name="Gender" id="Gender">
+            <option value="0">Male</option>
+            <option value="1">Female</option>
+        </select>
+
+        <label for="Married">Married:</label>
+        <select name="Married" id="Married">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <label for="Dependents">Dependents:</label>
+        <input type="number" name="Dependents" id="Dependents" required>
+
+        <label for="Education">Education:</label>
+        <select name="Education" id="Education">
+            <option value="0">Graduate</option>
+            <option value="1">Not Graduate</option>
+        </select>
+
+        <label for="Self_Employed">Self Employed:</label>
+        <select name="Self_Employed" id="Self_Employed">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <label for="ApplicantIncome">Applicant Income:</label>
+        <input type="number" name="ApplicantIncome" id="ApplicantIncome" required>
+
+        <label for="CoapplicantIncome">Coapplicant Income:</label>
+        <input type="number" name="CoapplicantIncome" id="CoapplicantIncome" required>
+
+        <label for="LoanAmount">Loan Amount:</label>
+        <input type="number" name="LoanAmount" id="LoanAmount" required>
+
+        <label for="Loan_Amount_Term">Loan Amount Term:</label>
+        <input type="number" name="Loan_Amount_Term" id="Loan_Amount_Term" required>
+
+        <label for="Credit_History">Credit History:</label>
+        <input type="number" name="Credit_History" id="Credit_History" required>
+
+        <label for="Property_Area">Property Area:</label>
+        <select name="Property_Area" id="Property_Area">
+            <option value="0">Urban</option>
+            <option value="1">Semiurban</option>
+            <option value="2">Rural</option>
+        </select>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction_text %}
+    <div class="result">
+        <p>{{ prediction_text }}</p>
+        <p>{{ cibil_score }}</p>
+        <p>{{ credit_history_insight }}</p>
+        <p><strong>Top Reasons:</strong></p>
+        <ul>
+            {% for reason, value in reasons %}
+            <li>{{ reason }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="chart-container">
+        <h3>Credit History Distribution</h3>
+        <img src="data:image/png;base64,{{ credit_history_chart }}" alt="Credit History Distribution">
+    </div>
+    <div class="chart-container">
+        <h3>CIBIL Score Distribution</h3>
+        <img src="data:image/png;base64,{{ cibil_score_chart }}" alt="CIBIL Score Distribution">
+    </div>
+    {% endif %}
+</body>
+</html>
